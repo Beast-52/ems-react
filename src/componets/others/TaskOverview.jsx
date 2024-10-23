@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { setLocalTaskData } from "../../utils/localStorage";
 
 export const TaskCard = ({ background, count, taskType }) => {
   return (
@@ -17,7 +18,7 @@ export const TaskCard = ({ background, count, taskType }) => {
 const TaskOverview = () => {
   const userData = useSelector((state) => state.auth.user);
   const reduxTask = useSelector((state) => state.tasks.tasks);
-  const [actualTaskData, setActualTaskData] = useState([]);
+  const [actualList, setactualList] = useState([]);
 
   useEffect(() => {
     if (reduxTask.length > 0 && userData) {
@@ -63,7 +64,7 @@ const TaskOverview = () => {
 
       // Convert categories object back to an array
       const actualTasksArray = Object.values(categories);
-      setActualTaskData(actualTasksArray);
+      setactualList(actualTasksArray);
     } else {
       // Initialize categories if there are no tasks
       const emptyCategories = {
@@ -80,13 +81,13 @@ const TaskOverview = () => {
           taskType: "New Task",
         },
       };
-      setActualTaskData(Object.values(emptyCategories));
+      setactualList(Object.values(emptyCategories));
     }
   }, [reduxTask, userData]);
 
   return (
     <div className="w-[95%] flex justify-between mx-auto flex-shrink-0 overflow-x-auto gap-10">
-      {actualTaskData.map((task, index) => (
+      {actualList.map((task, index) => (
         <TaskCard
           key={index}
           background={task.background}

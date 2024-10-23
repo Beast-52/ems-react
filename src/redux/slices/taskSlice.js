@@ -7,7 +7,7 @@ import {
 } from "../../utils/localStorage";
 import { v4 as uuid } from "uuid";
 const initialState = {
-  tasks: settingReduxLocalTaskData(),
+  tasks: [...settingReduxLocalTaskData()],
 };
 
 const taskSlice = createSlice({

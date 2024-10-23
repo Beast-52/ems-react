@@ -5,7 +5,7 @@ import AdminDashboard from "./componets/Dashboard/AdminDashboard";
 import UserDashboard from "./componets/Dashboard/UserDashboard";
 import { useEffect } from "react";
 import { findTask, setReduxTaskData } from "./redux/slices/taskSlice";
-import {taskData as tasksData} from './utils/data'
+import { taskData as taskList } from "./utils/data";
 import {
   getLocalAuthData,
   setLocalAuthData,
@@ -35,12 +35,12 @@ function App() {
         const users = { ...employee };
         setLocalUsersData(users);
         if (taskData.length === 0) {
-          dispatch(findTask('admin'))
-          setLocalTasksData(tasksData);
+          dispatch(findTask("admin"));
+          setLocalTasksData(taskList);
         }
       } else {
         const task = getLocalTaskData();
-        dispatch(findTask(userData.userId)); // Now this is an async thunk
+        dispatch(findTask(userData.userId));
         setLocalTaskData(task);
       }
     }
@@ -49,11 +49,8 @@ function App() {
   useEffect(() => {
     if (userData) {
       setLocalAuthData(userData);
-      if (userData.role !== "admin") {
-        dispatch(findTask(userData.userId)); // Fetch user tasks
-      } else {
-        dispatch(findTask("admin")); // Admin fetches all tasks
-      }
+      dispatch(setReduxTaskData(taskData));
+    
     }
   }, [userData]); // Add dispatch to dependencies
 

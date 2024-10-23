@@ -10,10 +10,7 @@ export const TaskPanelItem = ({ data }) => {
       }}
     >
       <div className="flex justify-between items-center mb-6">
-        <div
-          
-          className="rounded-full px-4 py-2 text-sm font-medium bg-opacity-20 backdrop-blur-2xl  bg-white"
-        >
+        <div className="rounded-full px-4 py-2 text-sm font-medium bg-opacity-20 backdrop-blur-2xl  bg-white">
           {data.category}
         </div>
         <div className="text-sm text-zinc-100">{data.taskDate}</div>
@@ -55,24 +52,29 @@ export const TaskPanelItem = ({ data }) => {
 };
 const TaskPanel = () => {
   const colorData = ["#ff6b6b", "#4f83cc", "#34d399", "#fbbf24", "#6366f1"];
-
+  const userData = useSelector((state) => state.auth.user);
   const reduxTasks = useSelector((state) => state.tasks.tasks);
-  const [actualTask, setActualTask] = useState(null);
+
+  const [actualTask, setActualTask] = useState([]);
   useEffect(() => {
-    if (reduxTasks) {
-      setActualTask(
-        reduxTasks[0].tasks.map((task, index) => ({
+    if (reduxTasks && reduxTasks[0]) {
+      const actualTaskList = reduxTasks
+        .filter((item) => item.userId == userData.userId)[0]
+        .tasks.map((task, index) => ({
           ...task,
           backgroundColor: colorData[index % colorData.length],
-        }))
-      );
+        }));
+
+      setActualTask(actualTaskList);
+      console.log("allTasks waly tasksList >", actualTaskList);
     }
-  }, []);
+  }, [reduxTasks]);
 
   return (
     <div className="flex gap-8 mt-20 overflow-x-auto scrollbar-hide py-10 px-5 mx-5">
-      {actualTask && actualTask.length > 0 &&
-        actualTask.map((item,idx) => {
+      {actualTask &&
+        actualTask.length > 0 &&
+        actualTask.map((item, idx) => {
           return <TaskPanelItem key={idx} data={item} />;
         })}
     </div>

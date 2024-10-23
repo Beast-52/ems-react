@@ -9,7 +9,6 @@ const Header = () => {
   const taskData = useSelector((state) => state.tasks.tasks);
   const dispatch = useDispatch();
   const Logout = () => {
-    dispatch(clearTasks());  // Clear all tasks in Redux state
     dispatch(logoutUser());  // Clear user data and local storage
   };
   
