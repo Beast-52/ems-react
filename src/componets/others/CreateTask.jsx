@@ -4,7 +4,7 @@ import { addTask } from "../../redux/slices/taskSlice";
 import { useDispatch } from "react-redux";
 
 const CreateTask = () => {
-  const { register, handleSubmit, setError } = useForm();
+  const { register, handleSubmit, setError,reset } = useForm();
   const dispatch = useDispatch();
   // Assuming userId is already part of the form data
   const submit = (data) => {
