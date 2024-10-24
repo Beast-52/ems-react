@@ -8,7 +8,7 @@ export function getLocalAuthData() {
   return JSON.parse(localStorage.getItem("userData"));
 }
 export function setLocalUsersData(data) {
-  localStorage.setItem("usersData", JSON.stringify(data));
+  localStorage.setItem("usersData", JSON.stringify([...data]));
 }
 
 export function getLocalUsersData() {

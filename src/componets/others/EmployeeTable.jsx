@@ -10,10 +10,10 @@ const EmployeeTable = () => {
   // Helper function to get task summary
   const getTaskOverview = () => {
     if (!usersData || !taskData) return; // Early exit if data is not available
-
-    const taskSummary = Array(usersData).map((user) => {
+   console.log(usersData)
+    const taskSummary = usersData.map((user) => {
       const userTasks =
-        taskData.find((item) => item.userId === user.userId)?.tasks || []; // Use optional chaining
+        taskData.find((item) => item.userId === user.userId)?.tasks ; // Use optional chaining
       const summary = {
         name: user.name,
         totalCount: userTasks.length,
@@ -32,7 +32,7 @@ const EmployeeTable = () => {
       return summary;
     });
 
-    setTaskOverview(Array(taskSummary));
+    setTaskOverview(taskSummary);
   };
 
   useEffect(() => {

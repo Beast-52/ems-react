@@ -55,7 +55,7 @@ const taskSlice = createSlice({
         userTasks.tasks.push({
           ...newTask,
         });
-        setLocalTaskData(state.tasks);
+        settingReduxLocalTaskData(state.tasks);
         console.log("updated state");
 
       } else {

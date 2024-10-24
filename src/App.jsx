@@ -32,7 +32,7 @@ function App() {
       dispatch(loginUser(userData)); // Ensure this action is a plain object
 
       if (userData.role === "admin") {
-        const users = getLocalUsersData() || { ...employee };
+        const users = getLocalUsersData() || [...employee];
         setLocalUsersData(users);
         if (taskData.length === 0) {
           dispatch(findTask(userData.role));

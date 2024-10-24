@@ -15,7 +15,7 @@ const authSlice = createSlice({
     user: getLocalAuthData() || null,
     isAuthenticated: false,
     error: null,
-    usersData: getLocalUsersData() || null,
+    usersData: getLocalUsersData() || [],
   },
   reducers: {
     loginUser: (state, action) => {
