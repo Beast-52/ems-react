@@ -18,7 +18,7 @@ export const TaskCard = ({ background, count, taskType }) => {
 const TaskOverview = () => {
   const userData = useSelector((state) => state.auth.user);
   const reduxTask = useSelector((state) => state.tasks.tasks);
-  const [actualList, setactualList] = useState([]);
+  const [actualList, setActualList] = useState([]);
 
   useEffect(() => {
     if (reduxTask.length > 0 && userData) {
@@ -64,7 +64,7 @@ const TaskOverview = () => {
 
       // Convert categories object back to an array
       const actualTasksArray = Object.values(categories);
-      setactualList(actualTasksArray);
+      setActualList(actualTasksArray);
     } else {
       // Initialize categories if there are no tasks
       const emptyCategories = {
@@ -81,7 +81,7 @@ const TaskOverview = () => {
           taskType: "New Task",
         },
       };
-      setactualList(Object.values(emptyCategories));
+      setActualList(Object.values(emptyCategories));
     }
   }, [reduxTask, userData]);
 

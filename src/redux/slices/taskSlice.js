@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { compose, createSlice } from "@reduxjs/toolkit";
 import { taskData } from "../../utils/data";
 import {
   getLocalTasksData,
@@ -17,26 +17,21 @@ const taskSlice = createSlice({
   reducers: {
     findTask: (state, action) => {
       const userId = action.payload;
-    
+
       // Ensure state.tasks is initialized and is an array
-      const tasks = state.tasks || [];  // Fallback to an empty array if null or undefined
-      
+      const tasks = state.tasks || []; // Fallback to an empty array if null or undefined
+
       if (userId !== "admin") {
         // Find tasks specific to this user
-        const filteredTasks = tasks.filter(
-          (task) => task.userId === userId
-        );
-        
-        console.log("Filtered tasks for user:", filteredTasks);
-        state.tasks = filteredTasks.length > 0 ? filteredTasks : [];  // Always assign a valid array
+        const filteredTasks = tasks.filter((task) => task.userId === userId);
+
+        state.tasks = filteredTasks.length > 0 ? filteredTasks : []; // Always assign a valid array
       } else {
         // For admin, load all tasks from local storage and ensure it's an array
         const allTasks = getLocalTasksData() || taskData;
-        console.log("All tasks for admin:", allTasks);
-        state.tasks = allTasks.length > 0 ? [...allTasks] : [];  // Always assign a valid array
+        state.tasks = allTasks.length > 0 ? [...allTasks] : []; // Always assign a valid array
       }
     },
-    
 
     setReduxTaskData: (state, action) => {
       state.tasks = action.payload;
@@ -55,15 +50,13 @@ const taskSlice = createSlice({
         // Add the new task to the user's tasks
         userTasks.tasks.push({
           ...newTask,
+          taskId: uuid(),
         });
         setLocalTasksData(state.tasks);
-
       } else {
-        console.error(`User with ID ${userId} not found.`);
       }
 
       // Optional: Log the updated state
-      console.log("Updated task list for userId", userId, userTasks.tasks);
     },
     deleteTask: (state, action) => {
       state.tasks = state.tasks.filter((task) => task.id !== action.payload);
@@ -77,19 +70,39 @@ const taskSlice = createSlice({
         updatedTask.description = action.payload.description;
       }
     },
-    toggleCompleteTask: (state, action) => {
-      const task = state.tasks.find((item) => item === action.payload);
-      if (task) {
-        task.completed = !task.completed;
+    toggleCompleteTask(state, action) {
+      const { taskId, userId } = action.payload;
+      const user = state.tasks.find((user) => user.userId === userId);
+      if (user) {
+        // Find the task by taskId
+        const taskIndex = user.tasks.findIndex(
+          (task) => task.taskId === taskId
+        );
+        if (taskIndex > -1) {
+          // Toggle the completed property
+          user.tasks[taskIndex].completed = !user.tasks[taskIndex].completed;
+          // You might also want to set 'active' to false when completed
+          user.tasks[taskIndex].active = false; // if applicable
+          setLocalTasksData(state.tasks)
+        }
       }
     },
+
     toggleFailedTask: (state, action) => {
-      const task = state.tasks.find((item) => item.id === action.payload);
-      if (task) {
-        task.failed = !task.failed;
-      }
-      else{
-        console.log(task)
+      const { taskId, userId } = action.payload;
+      const user = state.tasks.find((user) => user.userId === userId);
+      if (user) {
+        // Find the task by taskId
+        const taskIndex = user.tasks.findIndex(
+          (task) => task.taskId === taskId
+        );
+        if (taskIndex > -1) {
+          // Toggle the completed property
+          user.tasks[taskIndex].failed = !user.tasks[taskIndex].failed;
+          // You might also want to set 'active' to false when completed
+          user.tasks[taskIndex].active = false; // if applicable
+          setLocalTasksData(state.tasks)
+        }
       }
     },
     clearTasks: (state) => {
