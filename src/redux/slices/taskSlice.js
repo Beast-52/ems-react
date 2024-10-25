@@ -3,6 +3,7 @@ import { taskData } from "../../utils/data";
 import {
   getLocalTasksData,
   setLocalTaskData,
+  setLocalTasksData,
   settingReduxLocalTaskData,
 } from "../../utils/localStorage";
 import { v4 as uuid } from "uuid";
@@ -55,8 +56,7 @@ const taskSlice = createSlice({
         userTasks.tasks.push({
           ...newTask,
         });
-        settingReduxLocalTaskData(state.tasks);
-        console.log("updated state");
+        setLocalTasksData(state.tasks);
 
       } else {
         console.error(`User with ID ${userId} not found.`);
@@ -78,7 +78,7 @@ const taskSlice = createSlice({
       }
     },
     toggleCompleteTask: (state, action) => {
-      const task = state.tasks.find((item) => item.id === action.payload);
+      const task = state.tasks.find((item) => item === action.payload);
       if (task) {
         task.completed = !task.completed;
       }
@@ -87,6 +87,9 @@ const taskSlice = createSlice({
       const task = state.tasks.find((item) => item.id === action.payload);
       if (task) {
         task.failed = !task.failed;
+      }
+      else{
+        console.log(task)
       }
     },
     clearTasks: (state) => {

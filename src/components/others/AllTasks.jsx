@@ -1,7 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  toggleCompleteTask,
+  toggleFailedTask,
+} from "../../redux/slices/taskSlice";
 
 export const TaskPanelItem = ({ data }) => {
+  const taskData = useSelector(state=>state.tasks.tasks)
+  const dispatch = useDispatch();
+  const toggleComplete = (dat) => {
+    delete dat.backgroundColor
+    dispatch(toggleCompleteTask(dat));
+
+  };
+  const toggleFailed = (dat) => {
+    
+    delete dat.backgroundColor
+
+    dispatch(toggleFailedTask(dat));
+  };
   return (
     <div
       className={`task-panel h-[45vh] relative text-white px-8 py-6 w-[24vw] rounded-xl   flex-shrink-0 shadow-lg transform transition-transform hover:scale-105 hover:shadow-2xl `}
@@ -38,10 +55,16 @@ export const TaskPanelItem = ({ data }) => {
           )
         ) : (
           <>
-            <button className="bg-green-500 px-5 py-2 rounded-lg text-sm font-semibold text-white transition-all hover:bg-green-600 shadow-md">
+            <button
+              onClick={() => toggleComplete(data)}
+              className="bg-green-500 px-5 py-2 rounded-lg text-sm font-semibold text-white transition-all hover:bg-green-600 shadow-md"
+            >
               Mark as Complete
             </button>
-            <button className="bg-red-500 px-5 py-2 rounded-lg text-sm font-semibold text-white transition-all hover:bg-red-600 shadow-md">
+            <button
+              onClick={() => toggleFailed(data)}
+              className="bg-red-500 px-5 py-2 rounded-lg text-sm font-semibold text-white transition-all hover:bg-red-600 shadow-md"
+            >
               Mark as Fail
             </button>
           </>
@@ -66,7 +89,6 @@ const TaskPanel = () => {
         }));
 
       setActualTask(actualTaskList);
-      console.log("allTasks waly tasksList >", actualTaskList);
     }
   }, [reduxTasks]);
 

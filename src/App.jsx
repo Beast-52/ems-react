@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
-import Login from "./componets/Auth/Login";
-import AdminDashboard from "./componets/Dashboard/AdminDashboard";
-import UserDashboard from "./componets/Dashboard/UserDashboard";
+import Login from "./components/Auth/Login";
+import AdminDashboard from "./components/Dashboard/AdminDashboard";
+import UserDashboard from "./components/Dashboard/UserDashboard";
 import { useEffect } from "react";
 import { findTask, setReduxTaskData } from "./redux/slices/taskSlice";
 import { taskData as taskList } from "./utils/data";
@@ -41,7 +41,7 @@ function App() {
       } else {
         const task = getLocalTaskData();
         dispatch(findTask(userData.userId));
-        setLocalTaskData(task);
+        setLocalTasksData(task);
       }
     }
   }, []);

@@ -10,7 +10,6 @@ const EmployeeTable = () => {
   // Helper function to get task summary
   const getTaskOverview = () => {
     if (!usersData || !taskData) return; // Early exit if data is not available
-   console.log(usersData)
     const taskSummary = usersData.map((user) => {
       const userTasks =
         taskData.find((item) => item.userId === user.userId)?.tasks ; // Use optional chaining
