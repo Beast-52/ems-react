@@ -84,7 +84,7 @@ function App() {
     // Log the users in a table format
     console.table(users);
     if (pathname == "/") {
-      navigate('/login')
+      navigate("login");
     }
   }, []);
   return (

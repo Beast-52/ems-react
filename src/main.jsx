@@ -48,7 +48,7 @@ const router = createBrowserRouter([
       {
         path: "*",
         element: (
-          <PrivateRoute restricted={true}>
+          <PrivateRoute >
             <Login />
           </PrivateRoute>
         ),
