@@ -14,13 +14,14 @@ import {
 } from "./utils/localStorage";
 import { employee } from "./utils/data";
 import { loginUser } from "./redux/slices/authSlice";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 function App() {
   const userData = useSelector((state) => state.auth.user);
   const taskData = useSelector((state) => state.tasks.tasks);
   const dispatch = useDispatch();
-
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
   useEffect(() => {
     const auth = userData;
 
@@ -66,24 +67,25 @@ function App() {
     }
   }, [taskData]);
   useEffect(() => {
-
-      const users = [];
-      // Generate users e1@e.com to e5@e.com
-      for (let i = 1; i <= 5; i++) {
-        users.push({
-          email: `e${i}@e.com`,
-          password: "123",
-        });
-      }
-      // Add the admin user
+    const users = [];
+    // Generate users e1@e.com to e5@e.com
+    for (let i = 1; i <= 5; i++) {
       users.push({
-        email: "admin@me.com",
+        email: `e${i}@e.com`,
         password: "123",
       });
+    }
+    // Add the admin user
+    users.push({
+      email: "admin@me.com",
+      password: "123",
+    });
 
-      // Log the users in a table format
-      console.table(users);
-    
+    // Log the users in a table format
+    console.table(users);
+    if (pathname == "/") {
+      navigate('/login')
+    }
   }, []);
   return (
     <>

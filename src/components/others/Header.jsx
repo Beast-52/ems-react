@@ -12,7 +12,7 @@ const Header = () => {
   const navigate = useNavigate();
   const Logout = () => {
     dispatch(logoutUser());
-    navigate("/");
+    navigate("/login");
     // Clear user data and local storage
   };
   
