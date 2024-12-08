@@ -31,7 +31,7 @@ function App() {
       if (userData.role === "admin") {
         const users = getLocalUsersData() || [...employee]; // Fetch users or default to employee list
         setLocalUsersData(users);
-      
+
         if (!taskData || taskData.length === 0) {
           // If no task data exists or is empty, fetch and set tasks for admin
           dispatch(findTask(userData.role));
@@ -41,7 +41,7 @@ function App() {
         // For employee role
         const task = getLocalTaskData(); // Retrieve employee-specific task data
         dispatch(findTask(userData.userId)); // Find tasks specific to employee's userId
-      
+
         if (task && task.length > 0) {
           setLocalTasksData(task); // Set employee tasks in localStorage
         } else {
@@ -49,9 +49,8 @@ function App() {
           console.log("No tasks found for employee:", userData.userId);
         }
       }
-      
-  }
-}, [userData, taskData, dispatch]);
+    }
+  }, [userData, taskData, dispatch]);
 
   useEffect(() => {
     if (userData) {
@@ -66,7 +65,26 @@ function App() {
       setLocalTaskData(taskData);
     }
   }, [taskData]);
+  useEffect(() => {
 
+      const users = [];
+      // Generate users e1@e.com to e5@e.com
+      for (let i = 1; i <= 5; i++) {
+        users.push({
+          email: `e${i}@e.com`,
+          password: "123",
+        });
+      }
+      // Add the admin user
+      users.push({
+        email: "admin@me.com",
+        password: "123",
+      });
+
+      // Log the users in a table format
+      console.table(users);
+    
+  }, []);
   return (
     <>
       <Outlet />

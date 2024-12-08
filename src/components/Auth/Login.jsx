@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FaEye } from "react-icons/fa";
-import { FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../redux/slices/authSlice";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,8 +9,11 @@ const Login = () => {
   const { handleSubmit, register, reset } = useForm();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [message, setMessage] = useState("Check Console");
+  setTimeout(() => {
+    setMessage(null);
+  }, 3000);
   const submit = (data) => {
-    console.log(data);
     dispatch(loginUser(data));
     if (data.email.includes("admin")) {
       navigate("/admin/");
@@ -23,38 +25,46 @@ const Login = () => {
     }
     reset();
   };
+
   const err = useSelector((state) => state.auth.error);
 
   const [passwordType, setPasswordType] = useState(false);
   const togglePasswordType = () => setPasswordType(!passwordType);
 
   return (
-    <div className="w-full h-screen flex justify-center items-center">
+    <div className="w-full h-screen flex justify-center items-center bg-gradient-to-r from-zinc-900 to-black">
       <form
         onSubmit={handleSubmit(submit)}
-        className="flex flex-col items-center gap-y-3 border-2 border-emerald-500  justify-center px-16 py-20 rounded-xl"
+        className="w-full max-w-md bg-zinc-900 p-10 rounded-lg shadow-xl border-2 border-transparent hover:border-emerald-500 transition-all duration-300"
       >
-        <div>
-          <h1 className="text-center text-zinc-100 mb-10 text-[1.8vmax] font-bold">
-            Login
-          </h1>
-          {err && (
-            <div className="text-red-500 text-xs mb-5 font-semibold text-center ">
-              {err}
-            </div>
-          )}
+        <h1 className="text-center text-5xl  font-bold text-white mb-8">
+          Login
+        </h1>
+
+        {err && (
+          <div className="text-red-500 text-sm mb-5 font-semibold text-center">
+            {err}
+          </div>
+        )}
+        {message && (
+          <div className="text-red-500 text-sm mb-5 font-semibold text-center">
+            {message} !
+          </div>
+        )}
+        <div className="mb-6">
           <input
             type="email"
-            className="bg-zinc-800 text-2xl rounded-lg p placeholder:text-zinc-500 font-medium text-white outline-none py-2 px-5 pr-10"
+            className="w-full bg-gray-800 text-lg text-white rounded-lg p-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
             placeholder="Email"
             required
             {...register("email")}
           />
         </div>
-        <div className="relative">
+
+        <div className="relative mb-6">
           <input
             type={passwordType ? "text" : "password"}
-            className="bg-zinc-800 text-2xl rounded-lg p placeholder:text-zinc-500 font-medium text-white outline-none py-2 px-5 pr-10"
+            className="w-full bg-gray-800 text-lg text-white rounded-lg p-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
             placeholder="Password"
             required
             {...register("password")}
@@ -64,21 +74,37 @@ const Login = () => {
               onClick={togglePasswordType}
               color="white"
               size={20}
-              className="absolute right-0 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-80 hover:opacity-100 cursor-pointer"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
             />
           ) : (
             <FaEye
               onClick={togglePasswordType}
               color="white"
               size={20}
-              className="absolute right-0 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-80 hover:opacity-100 cursor-pointer"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
             />
           )}
         </div>
-        <div>
-          <button className="bg-emerald-500 px-5 py-2 text-white rounded-lg text-xl font-semibold w-full hover:bg-emerald-400">
+
+        <div className="mb-6">
+          <button className="w-full bg-emerald-500 text-white py-3 rounded-lg text-lg font-semibold hover:bg-emerald-600 transition duration-300">
             Login
           </button>
+        </div>
+
+        <div className="flex justify-between items-center">
+          <Link
+            to="/forgot-password"
+            className="text-sm text-emerald-500 hover:underline"
+          >
+            Forgot Password?
+          </Link>
+          <Link
+            to="/register"
+            className="text-sm text-emerald-500 hover:underline"
+          >
+            Don't have an account? Register
+          </Link>
         </div>
       </form>
     </div>
