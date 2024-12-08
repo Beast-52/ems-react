@@ -1,8 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
-import Login from "./components/Auth/Login";
-import AdminDashboard from "./components/Dashboard/AdminDashboard";
-import UserDashboard from "./components/Dashboard/UserDashboard";
 import { useEffect } from "react";
 import { findTask, setReduxTaskData } from "./redux/slices/taskSlice";
 import { taskData as taskList } from "./utils/data";
@@ -15,8 +12,9 @@ import {
   getLocalTaskData,
   setLocalTasksData,
 } from "./utils/localStorage";
-import { employee } from "./utils/data"; // Ensure taskData is being imported correctly
+import { employee } from "./utils/data";
 import { loginUser } from "./redux/slices/authSlice";
+import { Outlet } from "react-router-dom";
 
 function App() {
   const userData = useSelector((state) => state.auth.user);
@@ -24,52 +22,54 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Get auth from localStorage
     const auth = userData;
 
     if (auth) {
       setLocalAuthData(userData);
-      dispatch(loginUser(userData)); // Ensure this action is a plain object
+      dispatch(loginUser(userData));
 
       if (userData.role === "admin") {
-        const users = getLocalUsersData() || [...employee];
+        const users = getLocalUsersData() || [...employee]; // Fetch users or default to employee list
         setLocalUsersData(users);
-        if (taskData.length === 0) {
+      
+        if (!taskData || taskData.length === 0) {
+          // If no task data exists or is empty, fetch and set tasks for admin
           dispatch(findTask(userData.role));
-          setLocalTasksData(taskList);
+          setLocalTasksData(taskList); // Ensure taskList contains valid tasks for admin
         }
       } else {
-        const task = getLocalTaskData();
-        dispatch(findTask(userData.userId));
-        setLocalTasksData(task);
+        // For employee role
+        const task = getLocalTaskData(); // Retrieve employee-specific task data
+        dispatch(findTask(userData.userId)); // Find tasks specific to employee's userId
+      
+        if (task && task.length > 0) {
+          setLocalTasksData(task); // Set employee tasks in localStorage
+        } else {
+          // Optionally handle the case where no tasks are found for the employee
+          console.log("No tasks found for employee:", userData.userId);
+        }
       }
-    }
-  }, []);
+      
+  }
+}, [userData, taskData, dispatch]);
 
   useEffect(() => {
     if (userData) {
       setLocalAuthData(userData);
       dispatch(setReduxTaskData(taskData));
     }
-  }, [userData]); // Add dispatch to dependencies
+  }, [userData, taskData, dispatch]);
 
   useEffect(() => {
-    if (taskData.length > 0) {
-      setLocalTaskData(taskData); // Sync tasksData to localStorage
+    if (taskData && taskData.length > 0) {
+      // Ensure taskData is not null
+      setLocalTaskData(taskData);
     }
   }, [taskData]);
 
   return (
     <>
-      {userData ? (
-        userData.role === "admin" ? (
-          <AdminDashboard />
-        ) : (
-          <UserDashboard />
-        )
-      ) : (
-        <Login />
-      )}
+      <Outlet />
     </>
   );
 }

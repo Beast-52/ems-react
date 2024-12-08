@@ -1,18 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/slices/authSlice";
 import { getLocalAuthData } from "../../utils/localStorage";
 import { clearTasks } from "../../redux/slices/taskSlice";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Header = () => {
   const userData = useSelector((state) => state.auth.user);
   const taskData = useSelector((state) => state.tasks.tasks);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const Logout = () => {
-    dispatch(logoutUser());  // Clear user data and local storage
+    dispatch(logoutUser());
+    navigate("/");
+    // Clear user data and local storage
   };
   
-
+  useEffect(()=>{
+    console.log(userData)
+  },[])
   return (
     <div className="flex justify-between items-center px-10 py-12 text-white ">
       <div>

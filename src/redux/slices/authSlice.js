@@ -38,12 +38,11 @@ const authSlice = createSlice({
       }
     },
     logoutUser: (state) => {
-      
       state.user = null;
       state.isAuthenticated = false;
       state.usersData = null;
       removeLocalAuthData();
-      removeLocalTaskData()
+      removeLocalTaskData();
     },
   },
 });

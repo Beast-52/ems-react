@@ -3,12 +3,17 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   toggleCompleteTask,
   toggleFailedTask,
+  deleteTask,  // Assume you have a deleteTask action
+ // Assume you have an editTask action
 } from "../../redux/slices/taskSlice";
+import { useLocation } from "react-router-dom";
 
 export const TaskPanelItem = ({ data }) => {
   const userData = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
+  const location = useLocation();
 
+  // Toggle task completion or failure
   const toggleComplete = () => {
     dispatch(
       toggleCompleteTask({ taskId: data.taskId, userId: userData.userId })
@@ -20,9 +25,15 @@ export const TaskPanelItem = ({ data }) => {
       toggleFailedTask({ taskId: data.taskId, userId: userData.userId })
     );
   };
-  if(data.taskId == 1){
-    console.log(data)
-  }
+
+  // Edit or delete for admin
+  const handleEdit = () => {
+    dispatch(editTask(data.taskId));  // Add your editing logic
+  };
+
+  const handleDelete = () => {
+    dispatch(deleteTask(data.taskId));  // Add your delete logic
+  };
 
   return (
     <div
@@ -47,6 +58,26 @@ export const TaskPanelItem = ({ data }) => {
           {data.taskDescription}
         </p>
       </div>
+
+      {/* Admin Options (edit/delete) */}
+      {location.pathname.includes("/admin") && (
+        <div className="absolute top-4 right-4 flex gap-2">
+          <button
+            onClick={handleEdit}
+            className="bg-yellow-500 px-4 py-2 rounded-lg text-sm font-semibold text-white shadow-md"
+          >
+            Edit
+          </button>
+          <button
+            onClick={handleDelete}
+            className="bg-red-500 px-4 py-2 rounded-lg text-sm font-semibold text-white shadow-md"
+          >
+            Delete
+          </button>
+        </div>
+      )}
+
+      {/* Task Completion and Failure Options */}
       <div className="flex justify-center gap-4 items-center absolute bottom-10 left-1/2 -translate-x-1/2 w-full">
         {!data.active ? (
           data.completed ? (
@@ -86,6 +117,7 @@ const TaskPanel = () => {
   const userData = useSelector((state) => state.auth.user);
   const reduxTasks = useSelector((state) => state.tasks.tasks);
   const [actualTask, setActualTask] = useState([]);
+  const { pathname } = useLocation();
 
   useEffect(() => {
     if (reduxTasks && userData) {
@@ -107,7 +139,7 @@ const TaskPanel = () => {
   return (
     <div className="flex gap-8 mt-20 overflow-x-auto scrollbar-hide py-10 px-5 mx-5">
       {actualTask.map((item) => (
-        <TaskPanelItem key={item.taskId} data={item} /> // Use a unique key
+        <TaskPanelItem key={item.taskId} data={item} />
       ))}
     </div>
   );

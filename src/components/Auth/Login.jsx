@@ -4,12 +4,23 @@ import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../redux/slices/authSlice";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { handleSubmit, register, reset } = useForm();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const submit = (data) => {
+    console.log(data);
     dispatch(loginUser(data));
+    if (data.email.includes("admin")) {
+      navigate("/admin/");
+    } else if (data.email.includes("@e.com")) {
+      const userId = parseInt(data.email.split("@")[0].slice(1));
+      navigate(`/employee/${userId}`);
+    } else {
+      return;
+    }
     reset();
   };
   const err = useSelector((state) => state.auth.error);

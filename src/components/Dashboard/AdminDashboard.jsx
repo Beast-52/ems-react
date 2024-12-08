@@ -7,8 +7,8 @@ const AdminDashboard = () => {
   return (
     <>
       <Header />
-      <CreateTask/>
-      <EmployeeTable/>
+      <CreateTask />
+      <EmployeeTable />
     </>
   );
 };

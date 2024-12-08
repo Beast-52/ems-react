@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const EmployeeTable = () => {
   const usersData = useSelector((state) => state.auth.usersData);
@@ -10,9 +11,11 @@ const EmployeeTable = () => {
   // Helper function to get task summary
   const getTaskOverview = () => {
     if (!usersData || !taskData) return; // Early exit if data is not available
+    
     const taskSummary = usersData.map((user) => {
-      const userTasks =
-        taskData.find((item) => item.userId === user.userId)?.tasks ; // Use optional chaining
+      // Find the tasks assigned to the user
+      const userTasks = taskData.filter((item) => item.userId === user.userId)?.[0]?.tasks || [];  // Filter to get tasks for the user or default to empty array
+       
       const summary = {
         name: user.name,
         totalCount: userTasks.length,
@@ -20,14 +23,17 @@ const EmployeeTable = () => {
         completedCount: 0,
         failedCount: 0,
         newTasksCount: 0,
+        userId: user.userId, // Store the userId for navigation
       };
 
+      // Iterate through the user's tasks to get counts
       userTasks.forEach((task) => {
         if (task.active) summary.activeCount++;
         if (task.completed) summary.completedCount++;
         if (task.failed) summary.failedCount++;
         if (task.newTask) summary.newTasksCount++;
       });
+
       return summary;
     });
 
@@ -35,6 +41,7 @@ const EmployeeTable = () => {
   };
 
   useEffect(() => {
+    // Call getTaskOverview whenever the user or task data changes
     getTaskOverview();
   }, [usersData, taskData]); // Add taskData as a dependency
 
@@ -69,27 +76,38 @@ const EmployeeTable = () => {
           </tr>
         </thead>
         <tbody>
-          {taskOverview.map((task, index) => (
-            <tr
-              key={index}
-              className="outline rounded outline-gray-700 text-2xl"
-            >
-              <td className="py-3 px-4">{task.name}</td>
-              <td className="py-3 px-10">
-                <a href="#" className="text-[#4682B4]">
+          {taskOverview.length > 0 ? (
+            taskOverview.map((task, index) => (
+              <tr
+                key={index}
+                className="outline rounded outline-gray-700 text-2xl"
+              >
+                <td className="py-3 px-4">
+                  {/* Link to employee details page */}
+                  <Link to={`/admin/employee/${task.userId}`} className="text-[#4682B4]">
+                    {task.name}
+                  </Link>
+                </td>
+                <td className="py-3 px-10">
                   {task.totalCount}
-                </a>
+                </td>
+                <td className="py-3 px-20 text-[#ff5722]">
+                  {task.newTasksCount}
+                </td>
+                <td className="py-3 px-20 text-blue-500">{task.activeCount}</td>
+                <td className="py-3 px-20 text-green-500">
+                  {task.completedCount}
+                </td>
+                <td className="py-3 px-10 text-red-500">{task.failedCount}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="6" className="text-center py-3 px-4">
+                No data available
               </td>
-              <td className="py-3 px-20 text-[#ff5722]">
-                {task.newTasksCount}
-              </td>
-              <td className="py-3 px-20 text-blue-500">{task.activeCount}</td>
-              <td className="py-3 px-20 text-green-500">
-                {task.completedCount}
-              </td>
-              <td className="py-3 px-10 text-red-500">{task.failedCount}</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     </div>
