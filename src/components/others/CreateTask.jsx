@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { addTask } from "../../redux/slices/taskSlice";
 import { useDispatch } from "react-redux";
 
 const CreateTask = () => {
-  const { register, handleSubmit, setError,reset } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const dispatch = useDispatch();
-  // Assuming userId is already part of the form data
+
   const submit = (data) => {
     const userId = { userId: Number(data.userId) };
     delete data.userId;
@@ -18,12 +18,10 @@ const CreateTask = () => {
       newTask: true,
     };
 
-    // Dispatch the addTask action with the new task object and userId
-    dispatch(addTask({ userId : userId.userId, newTask: task }));
-
-    // Optionally reset the form after submission
+    dispatch(addTask({ userId: userId.userId, newTask: task }));
     reset();
   };
+
   const arr = [
     {
       id: 1,
@@ -41,7 +39,7 @@ const CreateTask = () => {
     },
     {
       id: 3,
-      title: "Asign To",
+      title: "Assign To",
       type: "number",
       placeholder: "Employee User Id",
       nameInput: "userId",
@@ -50,40 +48,49 @@ const CreateTask = () => {
       id: 4,
       title: "Category",
       type: "text",
-      placeholder: "design,development,etc...",
+      placeholder: "design, development, etc...",
       nameInput: "category",
     },
   ];
+
   return (
-    <div className="bg-zinc-800 px-5 py-10 mx-10 rounded-xl h-[50vh] ">
+    <div className="bg-zinc-800 p-5 md:px-10 py-10 mx-10 rounded-xl">
       <form
-        className="flex justify-between gap-x-10 items-center   h-full"
+        className="flex flex-col md:flex-row gap-10 items-stretch h-full"
         onSubmit={handleSubmit(submit)}
       >
-        <div className="flex gap-5 flex-col w-1/2">
+        {/* Input Fields */}
+        <div className="flex flex-col gap-5 w-full md:w-1/2">
           {arr.map(({ title, type, placeholder, id, nameInput }) => (
-            <div className="flex gap-2 flex-col text-white w-full" key={id}>
-              <h1 className="text-xl font-semibold">{title}</h1>
+            <div className="flex flex-col gap-2 text-white" key={id}>
+              <label className="text-lg md:text-xl font-semibold">
+                {title}
+              </label>
               <input
                 required
                 {...register(nameInput)}
                 type={type}
                 placeholder={placeholder}
-                className="bg-transparent px-5 py-3 text-xl font-medium placeholder:text-zinc-400 w-full outline-none border-zinc-400 border-[3px] rounded-xl"
+                className="bg-transparent px-4 py-3 text-base md:text-lg font-medium placeholder:text-zinc-400 w-full outline-none border-[3px] border-zinc-400 rounded-xl"
               />
             </div>
           ))}
         </div>
-        <div className="flex gap-5 flex-col w-2/3 h-full items-end">
-          <div className="flex gap-2 flex-col text-white h-full w-3/4">
-            <h1 className="text-xl font-semibold">Description</h1>
+
+        {/* Description and Submit Button */}
+        <div className="flex flex-col gap-5 w-full md:w-1/2">
+          <div className="flex flex-col gap-2 text-white h-full">
+            <label className="text-lg md:text-xl font-semibold">
+              Description
+            </label>
             <textarea
               {...register("taskDescription")}
-              className="bg-transparent h-full px-5 py-3 text-xl font-medium placeholder:text-zinc-400 w-full outline-none border-zinc-400 border-[3px] rounded-xl"
+              className="bg-transparent px-4 py-3 text-base md:text-lg font-medium placeholder:text-zinc-400 w-full h-32 md:h-48 outline-none border-[3px] border-zinc-400 rounded-xl resize-none"
             ></textarea>
           </div>
-          <button className="bg-emerald-500  py-4 rounded-xl w-3/4 font-semibold text-2xl text-zinc-100 hover:bg-emerald-400">
-            Submit
+          <button className="liquid-fill-btn py-3 md:py-4 rounded-xl font-semibold text-base md:text-xl text-zinc-100 w-full relative group">
+            <span>Submit</span>
+            <span className="liquid-fill"></span>
           </button>
         </div>
       </form>

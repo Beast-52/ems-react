@@ -6,6 +6,7 @@ import { loginUser } from "../../redux/slices/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
+  document.title = 'EMS - Login'
   const { handleSubmit, register, reset } = useForm();
   const navigate = useNavigate();
   const dispatch = useDispatch();

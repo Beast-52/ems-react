@@ -5,6 +5,7 @@ import EmployeeTable from "../others/EmployeeTable";
 import { Outlet, useLocation } from "react-router-dom";
 
 const AdminDashboard = () => {
+  document.title = 'EMS - Admin'
   const { pathname } = useLocation();
   return (
     <>

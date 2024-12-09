@@ -1,3 +1,149 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a; /* Dark background for the track */
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    45deg,
+    #4caf50,
+    #ff5722
+  ); /* Gradient to match the vibrant theme */
+  border-radius: 6px;
+  border: 3px solid #1a1a1a; /* Matches the track background for a floating effect */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    45deg,
+    #43a047,
+    #e64a19
+  ); /* Brighter colors on hover */
+}
+
+/* Support for Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #4caf50 #1a1a1a;
+}
+/* Base button styles */
+.liquid-fill-btn {
+    position: relative;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #4CAF50;
+    border: 2px solid transparent;
+    border-radius: 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: color 0.3s ease;
+    animation: btnIn 0.5s ease-out;
+  }
+  
+  /* The liquid animation container */
+  .liquid-fill-btn .liquid-fill {
+    position: absolute;
+    top: 100%;  /* Start from below the button */
+    left: 0;
+    width: 100%;
+    height: 300%;
+    background-color: rgba(255, 255, 255, 0.4); /* Light liquid color */
+    transition: transform 0.6s ease-in-out;
+    border-radius: 50%;
+    z-index: 0;
+  }
+  
+  /* Expand the liquid on hover */
+  .liquid-fill-btn:hover .liquid-fill {
+    transform: translateY(-100%) scale(1.5);
+  }
+  
+  /* Ensure the button text stays on top of liquid animation */
+  .liquid-fill-btn span {
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Button text change on hover */
+  .liquid-fill-btn:hover {
+    color: #4CAF50;
+  }
+  
+  /* Add a fix for the text color issue */
+  .liquid-fill-btn:hover span {
+    color: #fff;
+  }
+  
+  /* Input field animations */
+  input,
+  textarea {
+    transition: all 0.3s ease;
+  }
+  
+  input:focus,
+  textarea:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+    transform: translateY(-5px);
+  }
+  
+  input:focus::placeholder,
+  textarea:focus::placeholder {
+    opacity: 0.5;
+  }
+  
+  /* Floating label effect */
+  input:focus + label,
+  textarea:focus + label {
+    transform: translateY(-20px);
+    font-size: 0.85rem;
+    color: #4CAF50;
+    transition: all 0.3s ease;
+  }
+  
+  input:valid + label,
+  textarea:valid + label {
+    transform: translateY(-20px);
+    font-size: 0.85rem;
+    color: #4CAF50;
+    transition: all 0.3s ease;
+  }
+  
+  /* Label hover effect */
+  input:hover + label,
+  textarea:hover + label {
+    color: #4CAF50;
+    transform: translateY(-5px);
+  }
+  
+  /* Button hover animation */
+  button:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+  }
+  button{
+    transition: all 0.3s ease !important;
+    
+  }
+  
+  @keyframes btnIn {
+    0% {
+      transform: scale(0);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
