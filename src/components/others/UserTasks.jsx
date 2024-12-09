@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { deleteTask } from "../../redux/slices/taskSlice";
- // Import deleteTask action
+import { BiLeftArrow, BiLeftArrowAlt } from "react-icons/bi";
+// Import deleteTask action
 
 const UserTasks = () => {
   const reduxTasks = useSelector((state) => state.tasks.tasks); // Get all tasks from Redux store
@@ -39,7 +40,7 @@ const UserTasks = () => {
     const user = usersData.find((user) => user.userId === userId);
     return user ? user.name : "Unknown User";
   };
-
+  const navigate = useNavigate();
   // Handle delete task
   const handleDelete = (taskId, userId) => {
     dispatch(deleteTask({ taskId, userId })); // Dispatch the deleteTask action with taskId and userId
@@ -47,24 +48,29 @@ const UserTasks = () => {
 
   return (
     userTasks && (
-      <div className="w-full p-5 bg-gray-900 rounded-lg">
-        <h1 className="text-3xl font-semibold text-white mb-6">
+      <div className=" p-5 bg-zinc-900 relative  md:mx-10 rounded min-h-[50vh]">
+        <h1 className="text-3xl font-semibold text-white mb-6 px-10">
           Tasks for User {id}
         </h1>
-
+        <BiLeftArrowAlt
+          onClick={() => navigate(-1)}
+          className="absolute top-3 left-3 text-2xl cursor-pointer  hover:scale-150 transition-all duration-150 text-white"
+        />
         {/* Displaying the tasks dynamically for the selected user */}
         {userTasks.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-10 ">
             {userTasks.map((task) => (
               <div
                 key={task.taskId}
-                className="task-card bg-gray-800 p-5 rounded-lg text-white shadow-lg relative hover:shadow-xl transition-shadow duration-300 ease-in-out"
+                className="task-card bg-zinc-800 p-5 rounded-lg text-white shadow-lg relative hover:shadow-xl transition-shadow duration-300 ease-in-out"
               >
                 {/* Show the username along with task */}
                 <h2 className="font-semibold text-xl mb-2">
                   {task.userName} - {task.taskTitle}
                 </h2>
-                <p className="text-sm text-gray-400 mb-4">{task.taskDescription}</p>
+                <p className="text-sm text-gray-400 mb-4">
+                  {task.taskDescription}
+                </p>
 
                 <div className="flex items-center space-x-2">
                   <span

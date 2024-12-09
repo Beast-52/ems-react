@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   toggleCompleteTask,
   toggleFailedTask,
-  deleteTask,  // Assume you have a deleteTask action
- // Assume you have an editTask action
+  deleteTask, // Assume you have a deleteTask action
+  // Assume you have an editTask action
 } from "../../redux/slices/taskSlice";
 import { useLocation } from "react-router-dom";
 
@@ -28,16 +28,16 @@ export const TaskPanelItem = ({ data }) => {
 
   // Edit or delete for admin
   const handleEdit = () => {
-    dispatch(editTask(data.taskId));  // Add your editing logic
+    dispatch(editTask(data.taskId)); // Add your editing logic
   };
 
   const handleDelete = () => {
-    dispatch(deleteTask(data.taskId));  // Add your delete logic
+    dispatch(deleteTask(data.taskId)); // Add your delete logic
   };
 
   return (
     <div
-      className={`task-panel h-[45vh] relative text-white px-8 py-6 w-[24vw] rounded-xl flex-shrink-0 shadow-lg transform transition-transform hover:scale-105 hover:shadow-2xl`}
+      className={`task-panel min-h-[50vh] mx-auto md:h-[45vh] relative text-white px-8 py-6 md:w-[24vw] w-[20rem] rounded-xl flex-shrink-0 shadow-lg transform transition-transform hover:scale-105 hover:shadow-2xl`}
       style={{
         background: `linear-gradient(-30deg, ${data.backgroundColor} 30%, #1e293b 100%)`,
       }}
@@ -117,7 +117,6 @@ const TaskPanel = () => {
   const userData = useSelector((state) => state.auth.user);
   const reduxTasks = useSelector((state) => state.tasks.tasks);
   const [actualTask, setActualTask] = useState([]);
-  const { pathname } = useLocation();
 
   useEffect(() => {
     if (reduxTasks && userData) {
@@ -137,7 +136,7 @@ const TaskPanel = () => {
   }, [reduxTasks, userData]);
 
   return (
-    <div className="flex gap-8 mt-20 overflow-x-auto scrollbar-hide py-10 px-5 mx-5">
+    <div className="flex gap-8 mt-20 overflow-x-auto flex-wrap md:flex-nowrap  py-10 md:px-5 md:mx-5 ">
       {actualTask.map((item) => (
         <TaskPanelItem key={item.taskId} data={item} />
       ))}

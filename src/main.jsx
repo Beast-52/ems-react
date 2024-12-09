@@ -12,6 +12,7 @@ import Login from "./components/Auth/Login.jsx";
 import UserTasks from "./components/others/UserTasks.jsx";
 
 // Define your router with routes
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -28,6 +29,16 @@ const router = createBrowserRouter([
             <AdminDashboard />
           </PrivateRoute>
         ),
+        children: [
+          {
+            path: "employee/:id",
+            element: (
+              <PrivateRoute>
+                <UserTasks />
+              </PrivateRoute>
+            ),
+          },
+        ],
       },
       {
         path: "employee/:id",
@@ -38,17 +49,9 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "admin/employee/:id",
-        element: (
-          <PrivateRoute>
-            <UserTasks />
-          </PrivateRoute>
-        ),
-      },
-      {
         path: "*",
         element: (
-          <PrivateRoute >
+          <PrivateRoute>
             <Login />
           </PrivateRoute>
         ),

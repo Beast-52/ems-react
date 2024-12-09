@@ -86,7 +86,7 @@ const TaskOverview = () => {
   }, [reduxTask, userData]);
 
   return (
-    <div className="w-[95%] flex justify-between mx-auto flex-shrink-0 overflow-x-auto gap-10">
+    <div className="w-[95%] flex pb-5 justify-between mx-auto flex-shrink-0 overflow-x-auto md:gap-10 gap-x-2 ">
       {actualList.map((task, index) => (
         <TaskCard
           key={index}
