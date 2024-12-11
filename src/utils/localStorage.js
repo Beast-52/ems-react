@@ -22,7 +22,8 @@ export function getLocalTaskData() {
   return JSON.parse(localStorage.getItem("taskData"));
 }
 export function setLocalTasksData(data) {
-  localStorage.setItem("tasksData", JSON.stringify(data));
+  localStorage.setItem("tasksData", JSON.stringify(data)); // Saving to localStorage
+  console.log("Tasks saved to localStorage:", data); // Debug log to check data
 }
 
 export const getLocalTasksData = () => {

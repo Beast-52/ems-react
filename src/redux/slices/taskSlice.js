@@ -86,50 +86,51 @@ const taskSlice = createSlice({
         updatedTask.description = action.payload.description;
       }
     },
+    // Reducer to toggle completion status of a task
+    // Reducer to toggle completed status of a task
     toggleCompleteTask(state, action) {
       const { taskId, userId } = action.payload;
-      const user = state.tasks.find((user) => user.userId === userId);
-      if (user) {
-        // Find the task by taskId
-        const taskIndex = user.tasks.findIndex(
-          (task) => task.taskId === taskId
-        );
-        if (taskIndex > -1) {
-          const task = user.tasks[taskIndex];
-          // Toggle the completed property
-          task.completed = !task.completed;
-          task.active = false; // Optionally set active to false when completed
 
-          // Log task changes (for debugging)
-          console.log("Updated Completed Task:", task);
+      state.tasks = state.tasks.map((item) => {
+        if (item.userId === userId) {
+          return {
+            ...item,
+            tasks: item.tasks.map((task) =>
+              task.taskId === taskId
+                ? { ...task, completed: !task.completed, active: false }
+                : task
+            ),
+          };
         }
-        // After mutation, update the localStorage with the latest tasks state
-        console.log("State Before Saving Completed Task:", state.tasks);
+        return item;
+      });
+      // Save updated tasks to localStorage
+      if (state.tasks) {
         setLocalTasksData(state.tasks);
       }
+      console.log("saved");
     },
-
+    // Reducer to toggle failed status of a task
+    // Reducer to toggle failed status of a task
     toggleFailedTask(state, action) {
       const { taskId, userId } = action.payload;
-      const user = state.tasks.find((user) => user.userId === userId);
-      if (user) {
-        // Find the task by taskId
-        const taskIndex = user.tasks.findIndex(
-          (task) => task.taskId === taskId
-        );
-        if (taskIndex > -1) {
-          const task = user.tasks[taskIndex];
-          // Toggle the failed property
-          task.failed = !task.failed;
-          task.active = false; // Optionally set active to false when failed
 
-          // Log task changes (for debugging)
-          console.log("Updated Failed Task:", task);
+      state.tasks = state.tasks.map((item) => {
+        if (item.userId === userId) {
+          return {
+            ...item,
+            tasks: item.tasks.map((task) =>
+              task.taskId === taskId
+                ? { ...task, failed: !task.failed, active: false }
+                : task
+            ),
+          };
         }
-        // After mutation, update the localStorage with the latest tasks state
-        console.log("State Before Saving Failed Task:", state.tasks);
-        setLocalTasksData(state.tasks);
-      }
+        return item;
+      });
+      // Save updated tasks to localStorage
+      setLocalTasksData(state.tasks);
+      console.log("saved");
     },
     clearTasks: (state) => {
       state.tasks = []; // Clear the tasks

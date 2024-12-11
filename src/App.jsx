@@ -51,7 +51,7 @@ function App() {
         }
       }
     }
-  }, [userData, taskData, dispatch]);
+  }, [userData]);
 
   useEffect(() => {
     if (userData) {
